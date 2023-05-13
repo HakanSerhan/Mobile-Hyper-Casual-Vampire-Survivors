@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &54526937 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4959307796198808530, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
+  m_PrefabInstance: {fileID: 2399266184535460149}
+  m_PrefabAsset: {fileID: 0}
 --- !u!54 &108068761 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 7899944602331760579, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
@@ -148,6 +153,10 @@ PrefabInstance:
     - target: {fileID: 1479208766464490, guid: e45a69c421144304c8d8176026d3fd7b, type: 3}
       propertyPath: m_Name
       value: MobileFreeZombie
+      objectReference: {fileID: 0}
+    - target: {fileID: 1479208766464490, guid: e45a69c421144304c8d8176026d3fd7b, type: 3}
+      propertyPath: m_TagString
+      value: enemy
       objectReference: {fileID: 0}
     - target: {fileID: 4771946628154188, guid: e45a69c421144304c8d8176026d3fd7b, type: 3}
       propertyPath: m_RootOrder
@@ -234,11 +243,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
-  healthPoint: 10
-  maxHealthPoint: 10
   target: {fileID: 108068763}
   speed: 0.01
-  distance: 5
+  distance: 8
   attackDistance: 2
   attackDelay: 1
 --- !u!54 &122459931
@@ -270,6 +277,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.6258159, y: 0.9257517, z: 0.30329022}
   m_Center: {x: 0.021538716, y: 0.48152184, z: -0.0070408983}
+--- !u!114 &122459934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122459928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0eec4b28777db242b8dcfa95e0ceef1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealthPoint: 100
 --- !u!1001 &199583203
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -280,6 +300,10 @@ PrefabInstance:
     - target: {fileID: 1479208766464490, guid: e45a69c421144304c8d8176026d3fd7b, type: 3}
       propertyPath: m_Name
       value: MobileFreeZombie (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1479208766464490, guid: e45a69c421144304c8d8176026d3fd7b, type: 3}
+      propertyPath: m_TagString
+      value: enemy
       objectReference: {fileID: 0}
     - target: {fileID: 4771946628154188, guid: e45a69c421144304c8d8176026d3fd7b, type: 3}
       propertyPath: m_RootOrder
@@ -1056,11 +1080,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
-  healthPoint: 10
-  maxHealthPoint: 10
   target: {fileID: 108068763}
   speed: 0.01
-  distance: 5
+  distance: 8
   attackDistance: 2
   attackDelay: 1
 --- !u!65 &2136983871
@@ -1092,6 +1114,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &2136983874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136983868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0eec4b28777db242b8dcfa95e0ceef1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealthPoint: 100
 --- !u!1001 &2399266184535460149
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1108,6 +1143,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 108068761}
     - target: {fileID: 416429725069588996, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
+      propertyPath: Gun
+      value: 
+      objectReference: {fileID: 54526937}
+    - target: {fileID: 416429725069588996, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
+      propertyPath: rpm
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 416429725069588996, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
       propertyPath: anim
       value: 
       objectReference: {fileID: 108068762}
@@ -1120,16 +1163,24 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 416429725069588996, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
+      propertyPath: interval
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 416429725069588996, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
       propertyPath: joystick
       value: 
       objectReference: {fileID: 2003001931}
     - target: {fileID: 416429725069588996, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
       propertyPath: checkDist
-      value: 5
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 416429725069588996, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 416429725069588996, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
+      propertyPath: FireDamage
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 416429725069588996, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
       propertyPath: animController
@@ -1230,6 +1281,14 @@ PrefabInstance:
     - target: {fileID: 4545291860600167353, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4959307796198808530, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 4959307796198808530, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.68
       objectReference: {fileID: 0}
     - target: {fileID: 7899944602331760579, guid: 3f0290da1aa804b4ca07ef48a929bacd, type: 3}
       propertyPath: m_Constraints

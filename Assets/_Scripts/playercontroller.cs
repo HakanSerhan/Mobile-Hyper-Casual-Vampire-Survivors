@@ -18,22 +18,27 @@ public class playercontroller : MonoBehaviour
     private CharacterController controller;
     public bl_Joystick floatingJoystick;
     private bool isAlive = true;
-
-
+    private GameObject target;
+    private bool idle;
+    private bool run;
+    private bool isAttacking = false;
+    public Transform Gun;
+    public float rpm;
+    public int FireDamage;
+    public float interval = 1f;
+    private float timer = 0f;
     private void Start()
     {
         enemies = GameObject.FindGameObjectsWithTag("enemy");
         hp = maxhp;
         Debug.Log("Start HP:" + hp);
-        
-
     }
     void Awake()
     {
         controller = GetComponent<CharacterController>();
         floatingJoystick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<bl_Joystick>();
     }
-   
+
     private void Update()
     {
         if (isAlive == true)
@@ -41,19 +46,114 @@ public class playercontroller : MonoBehaviour
             Move();
         }
         CheckEnemy();
-        if(hp <= 0)
+        if (hp <= 0)
         {
             Die();
         }
-        
+        CheckAttack();
+        Attack();
+        CheckAnim();
     }
     public void Die()
     {
         isAlive = false;
-        animController.SetBool("die",true);
-        animController.SetBool("run", false);
-        animController.SetBool("Idle", false);
-        
+    }
+    public void CheckAttack()
+    {
+        if (idle == true && target != null)
+        {
+            isAttacking = true;
+        }
+        else
+        {
+            isAttacking = false;
+        }
+    }
+    public void Attack()
+    {
+        if (isAttacking)
+        {
+            //  transform.LookAt(target.transform);
+            Vector3 relativePos = target.transform.position - transform.position;
+            Quaternion toRotation = Quaternion.LookRotation(relativePos);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+            Shoot(Gun.transform, target.transform);
+        }
+    }
+    public void CheckAnim()
+    {
+        if (run == true && idle == false && isAttacking == false && isAlive != false)
+        {
+            animController.SetBool("run", true);
+            animController.SetBool("Idle", false);
+            animController.SetBool("Idle", false);
+            animController.SetBool("weaponidle", false);
+            animController.SetBool("attack", false);
+        }
+        else if (run == false && isAttacking == false && isAlive != false)
+        {
+            animController.SetBool("run", false);
+            animController.SetBool("Idle", true);
+            animController.SetBool("attack", false);
+            animController.SetBool("weaponidle", false);
+
+        }
+        else if (isAttacking == true && isAlive == true)
+        {
+
+            if (timer == 0)
+            {
+                animController.SetBool("run", false);
+                animController.SetBool("Idle", false);
+                animController.SetBool("attack", true);
+                animController.SetBool("weaponidle", false);
+            }
+            else
+            {
+                animController.SetBool("run", false);
+                animController.SetBool("Idle", false);
+                animController.SetBool("attack", false);
+                animController.SetBool("weaponidle", true);
+            }
+
+        }
+        else if (isAlive == false)
+        {
+            animController.SetBool("die", true);
+            animController.SetBool("run", false);
+            animController.SetBool("Idle", false);
+            animController.SetBool("attack", false);
+            animController.SetBool("weaponidle", false);
+
+        }
+    }
+    public void Shoot(Transform origin, Transform target)
+    {
+        timer += Time.deltaTime;
+
+        if (timer >= interval)
+        {
+
+            RaycastHit rayHit;
+
+            Physics.Raycast(origin.position, (target.position - origin.position).normalized, out rayHit);
+
+            if (rayHit.collider != null)
+            {
+                if (rayHit.collider.gameObject.tag == "enemy")
+                {
+                    rayHit.collider.gameObject.GetComponent<Health>().TakeDamage(FireDamage);
+                    timer = 0f;
+                }
+            }
+
+        }
+
+    }
+    private void CreateWeaponTracer(Vector3 startPos, Vector3 targetPos)
+    {
+        Vector3 dir = (targetPos - startPos).normalized;
+
     }
     public void Move()
     {
@@ -92,9 +192,8 @@ public class playercontroller : MonoBehaviour
                 if (!animController)
                     return;
 
-                animController.SetBool("run", true);
-                animController.SetBool("Idle", false);
-
+                run = true;
+                idle = false;
             }
         }
         else
@@ -102,8 +201,8 @@ public class playercontroller : MonoBehaviour
             if (!animController)
                 return;
 
-            animController.SetBool("run", false);
-            animController.SetBool("Idle", true);
+            run = false;
+            idle = true;
         }
     }
 
@@ -113,7 +212,11 @@ public class playercontroller : MonoBehaviour
         float distance = Vector3.Distance(transform.position, closestEnemy.transform.position);
         if (distance < checkDist + 0.5 && closestEnemy.name != "player")
         {
-            Debug.Log(closestEnemy.name);
+            target = closestEnemy;
+        }
+        else
+        {
+            target = null;
         }
         enemies = GameObject.FindGameObjectsWithTag("enemy");
 
@@ -141,9 +244,9 @@ public class playercontroller : MonoBehaviour
     }
     public void TakeDamage(int damage)
     {
-            hp -= damage;
-            Debug.Log(hp);
-        
+        hp -= damage;
+        Debug.Log(hp);
+
     }
-   
+
 }
