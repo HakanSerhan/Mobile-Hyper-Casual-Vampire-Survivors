@@ -5,7 +5,9 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     private float healthPoint;
+
     [SerializeField] private float maxHealthPoint;
+    public ParticleSystem hit;
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +30,8 @@ public class Health : MonoBehaviour
     public void TakeDamage(int damage)
     {
         healthPoint -= damage;
-        Debug.Log(healthPoint);
 
+        Debug.Log(healthPoint);
+        hit.Emit(1);
     }
 }

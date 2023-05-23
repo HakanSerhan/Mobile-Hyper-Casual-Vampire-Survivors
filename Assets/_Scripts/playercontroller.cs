@@ -9,7 +9,7 @@ public class playercontroller : MonoBehaviour
     public Rigidbody rb;
     public Animator animController;
     public float speed;
-    public float rotationSpeed = 1000f;
+    public float rotationSpeed;
     public static float hp;
     public float maxhp;
     public float checkDist;
@@ -27,6 +27,8 @@ public class playercontroller : MonoBehaviour
     public int FireDamage;
     public float interval = 1f;
     private float timer = 0f;
+    public ParticleSystem Muzzle;
+    public TrailRenderer tracerEffect;
     private void Start()
     {
         enemies = GameObject.FindGameObjectsWithTag("enemy");
@@ -78,6 +80,13 @@ public class playercontroller : MonoBehaviour
             Quaternion toRotation = Quaternion.LookRotation(relativePos);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
             Shoot(Gun.transform, target.transform);
+            Muzzle.Emit(1);
+
+
+        }
+        else if (isAttacking == false)
+        {
+
         }
     }
     public void CheckAnim()
@@ -142,8 +151,15 @@ public class playercontroller : MonoBehaviour
             {
                 if (rayHit.collider.gameObject.tag == "enemy")
                 {
+
                     rayHit.collider.gameObject.GetComponent<Health>().TakeDamage(FireDamage);
+                    Vector3 hitTarget = target.transform.position;
+                    hitTarget.y = 3f;
+                    var tracer = Instantiate(tracerEffect, Gun.position, Quaternion.identity);
+                    tracer.AddPosition(Gun.position);
+                    tracer.transform.position = hitTarget;
                     timer = 0f;
+
                 }
             }
 
